@@ -47,7 +47,7 @@ jobs:
             HOST_HOME_DIR="${{ env.HOME }}"
             HOST_PROJ_DIR="${{ env.MAIN_DIR }}"
             PROJ_DIR="${{ env.MAIN_DIR }}"
-            PATH="${{ env.HOME }}/.cargo/bin;$PATH"
+            PATH="${{ env.HOME }}\\.cargo\\bin;$PATH"
             CARGO_HOME="${{ env.HOME }}/.cargo"
             RUSTUP_HOME="${{ env.HOME }}/.rustup"
             CARGO_LOG="cargo::core::compiler::fingerprint=info"
