@@ -1,0 +1,64 @@
+name: build and release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v[0-9]*'
+  pull_request:
+
+concurrency:
+  group: >
+    ${{ github.workflow }} @
+    ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        #os: [ubuntu-20.04, windows-2019, macos-11]
+        os: [windows-2019]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Save env vars for cibuildwheel
+        run: >
+          echo "MAIN_DIR=$PWD" >> "$GITHUB_ENV";
+          echo "HOME=$HOME" >> "$GITHUB_ENV";
+          cat "$GITHUB_ENV"
+        shell: bash
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.11.1
+        env:
+          CIBW_SKIP: >
+            *musllinux* *pp*
+          CIBW_ENVIRONMENT: >
+            HOST_HOME_DIR="${{ env.HOME }}"
+            HOST_PROJ_DIR="${{ env.MAIN_DIR }}"
+            PROJ_DIR="${{ env.MAIN_DIR }}"
+            PATH="${{ env.HOME }}/.cargo/bin:$PATH"
+            CARGO_HOME="${{ env.HOME }}/.cargo"
+            RUSTUP_HOME="${{ env.HOME }}/.rustup"
+            CARGO_LOG="cargo::core::compiler::fingerprint=info"
+          CIBW_ENVIRONMENT_LINUX: >
+            HOST_HOME_DIR="/host/${{ env.HOME }}"
+            HOST_PROJ_DIR="/host/${{ env.MAIN_DIR }}"
+            PROJ_DIR="/project"
+            PATH="/host/${{ env.HOME }}/.cargo/bin:$PATH"
+            CARGO_HOME="/host/${{ env.HOME }}/.cargo"
+            RUSTUP_HOME="/host/${{ env.HOME }}/.rustup"
+            CARGO_LOG="cargo::core::compiler::fingerprint=info"
+          CIBW_BEFORE_ALL: >
+            bash $PROJ_DIR/ci-utils/ensure-rust-linux.sh
+          CIBW_BEFORE_ALL_WINDOWS: >
+            bash %PROJ_DIR%/ci-utils/ensure-rust-win.sh
+          CIBW_BEFORE_ALL_MACOS: >
+            bash $PROJ_DIR/ci-utils/ensure-rust-macos.sh
+          CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_BUILD_VERBOSITY: 1
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
