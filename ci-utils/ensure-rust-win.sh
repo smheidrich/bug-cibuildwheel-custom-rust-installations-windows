@@ -9,4 +9,12 @@ fi
 ls -la "$HOST_HOME_DIR"
 ls -la "$HOST_HOME_DIR/.rustup"
 cat "$HOST_HOME_DIR/.rustup/settings.toml"
+rustc -V
+echo "----------"
+env
+echo "----------"
+python3 -c "import os; print(os.environ)"
+echo "----------"
+python3 -c "from subprocess import run; run(['rustc', '-V'])"
+echo "----------"
 #cargo -V
