@@ -43,6 +43,14 @@ jobs:
             CARGO_HOME="${{ env.HOME }}/.cargo"
             RUSTUP_HOME="${{ env.HOME }}/.rustup"
             CARGO_LOG="cargo::core::compiler::fingerprint=info"
+          CIBW_ENVIRONMENT_WINDOWS: >
+            HOST_HOME_DIR="${{ env.HOME }}"
+            HOST_PROJ_DIR="${{ env.MAIN_DIR }}"
+            PROJ_DIR="${{ env.MAIN_DIR }}"
+            PATH="${{ env.HOME }}/.cargo/bin;$PATH"
+            CARGO_HOME="${{ env.HOME }}/.cargo"
+            RUSTUP_HOME="${{ env.HOME }}/.rustup"
+            CARGO_LOG="cargo::core::compiler::fingerprint=info"
           CIBW_ENVIRONMENT_LINUX: >
             HOST_HOME_DIR="/host/${{ env.HOME }}"
             HOST_PROJ_DIR="/host/${{ env.MAIN_DIR }}"
