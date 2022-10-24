@@ -9,4 +9,4 @@ fi
 ls -la "$HOST_HOME_DIR"
 ls -la "$HOST_HOME_DIR/.rustup"
 cat "$HOST_HOME_DIR/.rustup/settings.toml"
-cargo -V
+#cargo -V
