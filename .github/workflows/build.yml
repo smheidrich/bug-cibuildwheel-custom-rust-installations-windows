@@ -67,6 +67,7 @@ jobs:
             bash $PROJ_DIR/ci-utils/ensure-rust-macos.sh
           CIBW_ARCHS_WINDOWS: "AMD64"
           CIBW_BUILD_VERBOSITY: 1
+          CIBW_BUILD_FRONTEND: build
       - uses: actions/upload-artifact@v3
         with:
           path: ./wheelhouse/*.whl
