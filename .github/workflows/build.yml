@@ -24,12 +24,12 @@ jobs:
         os: [windows-2019]
     steps:
       - uses: actions/checkout@v3
-      - name: Save env vars for cibuildwheel
-        run: >
-          echo "MAIN_DIR=$PWD" >> "$GITHUB_ENV";
-          echo "HOME=$HOME" >> "$GITHUB_ENV";
-          cat "$GITHUB_ENV"
-        shell: bash
+      #- name: Save env vars for cibuildwheel
+        #run: >
+          #echo "MAIN_DIR=$PWD" >> "$GITHUB_ENV";
+          #echo "HOME=$HOME" >> "$GITHUB_ENV";
+          #cat "$GITHUB_ENV"
+        #shell: bash
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.11.1
         env:
@@ -44,12 +44,12 @@ jobs:
             RUSTUP_HOME="${{ env.HOME }}/.rustup"
             CARGO_LOG="cargo::core::compiler::fingerprint=info"
           CIBW_ENVIRONMENT_WINDOWS: >
-            HOST_HOME_DIR="${{ env.HOME }}"
-            HOST_PROJ_DIR="${{ env.MAIN_DIR }}"
-            PROJ_DIR="${{ env.MAIN_DIR }}"
-            PATH="${{ env.MAIN_DIR }}\\ci-utils;${{ env.HOME }}\\.cargo\\bin;$PATH"
-            CARGO_HOME="${{ env.HOME }}/.cargo"
-            RUSTUP_HOME="${{ env.HOME }}/.rustup"
+            HOST_HOME_DIR="$HOME"
+            HOST_PROJ_DIR="$(pwd)"
+            PROJ_DIR="$(pwd)"
+            PATH="$GITHUB_WORKSPACE\\ci-utils;$HOME\\.cargo\\bin;$PATH"
+            CARGO_HOME="$HOME\\.cargo"
+            RUSTUP_HOME="$HOME\\.rustup"
             CARGO_LOG="cargo::core::compiler::fingerprint=info"
           CIBW_ENVIRONMENT_LINUX: >
             HOST_HOME_DIR="/host/${{ env.HOME }}"
