@@ -68,6 +68,7 @@ jobs:
           CIBW_BEFORE_ALL_MACOS: >
             bash $PROJ_DIR/ci-utils/ensure-rust-macos.sh
           CIBW_ARCHS_WINDOWS: "AMD64"
+          CIBW_ARCHS_LINUX: "i686"
           CIBW_BUILD_VERBOSITY: 1
           CIBW_BUILD_FRONTEND: build
       - uses: actions/upload-artifact@v3
