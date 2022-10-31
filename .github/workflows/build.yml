@@ -21,7 +21,7 @@ jobs:
     strategy:
       matrix:
         #os: [ubuntu-20.04, windows-2019, macos-11]
-        os: [windows-2019]
+        os: [ubuntu-20.04]
     steps:
       - uses: actions/checkout@v3
       #- name: Save env vars for cibuildwheel
@@ -59,7 +59,9 @@ jobs:
             CARGO_HOME="/host/${{ env.HOME }}/.cargo"
             RUSTUP_HOME="/host/${{ env.HOME }}/.rustup"
             CARGO_LOG="cargo::core::compiler::fingerprint=info"
+            ARCH="$(uname -m)"
           CIBW_BEFORE_ALL: >
+            echo "ARCH=$ARCH";
             bash $PROJ_DIR/ci-utils/ensure-rust-linux.sh
           CIBW_BEFORE_ALL_WINDOWS: >
             bash %PROJ_DIR%/ci-utils/ensure-rust-win.sh
